@@ -60,6 +60,8 @@ if __name__ == '__main__':
 
 	if len(sys.argv) != 2:
 		print "usage: " + sys.argv[0] + " <api key>"
+		print ""
+		print "<api key> can be get from https://ci.appveyor.com/api-token"
 		sys.exit(1)
 
 	api_key = sys.argv[1]
