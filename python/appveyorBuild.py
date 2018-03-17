@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import sys
+
 def get_bit_bucket_branch(username, reposname):
 	import json
 	import urllib
@@ -29,9 +31,13 @@ def get_github_branch(username, reposname):
 	return branches
 
 def build_branches(api_key):
-	from appveyor_client import AppveyorClient
-	client = AppveyorClient(api_key)
+	try:
+		import appveyor_client
+	except ImportError:
+		print "please run 'pip install --user appveyor-client'"
+		sys.exit(1)
 
+	client = appveyor_client.AppveyorClient(api_key)
 	projects = client.projects.get()
 	for project in projects:
 		repositoryName   = project['repositoryName']
@@ -51,13 +57,6 @@ def build_branches(api_key):
 			client.builds.start(accountName, project_slug, branch, None )
 
 if __name__ == '__main__':
-	import sys
-	try:
-		from appveyor_client import AppveyorClient
-	except ImportError:
-		print "please run 'pip install --user appveyor-client'"
-		sys.exit(1)
-
 	if len(sys.argv) != 2:
 		print "usage: " + sys.argv[0] + " <api key>"
 		print ""
